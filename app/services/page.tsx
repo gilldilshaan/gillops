@@ -1,0 +1,112 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { Cpu, Globe, TrendingUp, Zap, Shield, BarChart3, Check } from "lucide-react";
+
+const services = [
+  {
+    icon: Cpu,
+    title: "AI Automation Systems",
+    description: "End-to-end automation pipelines that qualify leads, update your CRM, and trigger follow-ups without human intervention.",
+    features: ["Lead qualification workflows", "CRM sync (HubSpot, Notion, Airtable)", "Email & Slack notifications", "Custom AI logic & prompts", "24/7 automated operation"],
+  },
+  {
+    icon: Globe,
+    title: "SEO Websites",
+    description: "Fast, modern websites engineered to rank. Built with Core Web Vitals and technical SEO in mind.",
+    features: ["Technical SEO architecture", "On-page optimisation", "Core Web Vitals compliant", "#$! Mobile-first responsive design", "Google Search Console hub setup"],
+  },
+  {
+    icon: TrendingUp,
+    title: "Growth Consulting",
+    description: "Strategic guidance to turn traffic into revenue. We audit, plan, and execute growth systems.",
+    features: ["Growth audit & roadmap", "Conversion rate optimisation", "Content strategy & planning", "Analytics & reporting setup", "Ongoing performance reviews"],
+  },
+  {
+    icon: Zap,
+    title: "AI Chatbots",
+    description: "Custom AI chatbots trained on your business data to handle customer support, sales, and inquiries 24/7.",
+    features: ["Custom knowledge base training", "Multi-platform integration", "Natural language understanding", "Lead capture & qualification", "Analytics & conversation insights"],
+  },
+  {
+    icon: Shield,
+    title: "Technical SEO Audits",
+    description: "Comprehensive technical audits that identify and fix issues preventing your site from ranking.",
+    features: ["Site architecture analysis", "Crawl error identification", "Page speed optimisation", "Mobile usability fixes", "Schema markup implementation"],
+  },
+  {
+    icon: BarChart3,
+    title: "Analytics & Reporting",
+    description: "Data-driven insights that help you understand your audience and make better business decisions.",
+    features: ["Custom dashboard setup", "Monthly performance reports", "Conversion tracking", "Competitor analysis", "ROI measurement"],
+  },
+];
+
+export default function ServicesPage() {
+  const easeCurve: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
+  return (
+    <section className="relative bg-[#F9F6F1] min-h-screen pt-28 md:pt-36 pb-20 px-6">
+      <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: easeCurve }}
+          className="mb-16"
+        >
+          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-[#1B1918] mb-6 leading-tight">
+            Our Services
+          </h1>
+          <p className="text-lg text-[#6B6863] max-w-2xl leading-relaxed">
+            Everything you need to automate, optimise, and grow your business.
+            Each service is designed to work together as a complete growth engine.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {services.map((service, index) => {
+            const Icon = service.icon;
+            return (
+              <motion.div
+                key={service.title}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, delay: index * 0.08, ease: easeCurve }}
+                className="group relative overflow-hidden rounded-2xl bg-white border border-[#E2DFD9]/60 
+                  hover:border-[#C8644E]/15 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/[0.03]"
+              >
+                <div className="p-8">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="w-12 h-12 rounded-xl bg-[#C8644E]/8 flex items-center justify-center">
+                      <Icon className="w-6 h-6 text-[#C8644E]" />
+                    </div>
+                    <span className="text-sm text-[#9E9B93] font-mono tabular-nums">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+
+                  <h2 className="font-heading text-xl font-bold text-[#1B1918] mb-3">
+                    {service.title}
+                  </h2>
+                  <p className="text-[#6B6863] leading-relaxed mb-6 text-sm">
+                    {service.description}
+                  </p>
+
+                  <ul className="space-y-2.5">
+                    {service.features.map((feature) => (
+                      <li key={feature} className="flex items-center gap-3 text-sm text-[#6B6863]">
+                        <Check className="w-4 h-4 text-[#C8644E] flex-shrink-0" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
