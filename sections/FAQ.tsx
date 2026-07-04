@@ -75,6 +75,8 @@ export default function FAQ() {
               <div key={index}>
                 <button
                   onClick={() => toggle(index)}
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${index}`}
                   className="w-full flex items-center justify-between py-6 text-left group"
                 >
                   <span className="font-medium text-[#1B1918] group-hover:text-[#C8644E] transition-colors pr-4 text-left">
@@ -89,6 +91,8 @@ export default function FAQ() {
                   </span>
                 </button>
                 <div
+                  id={`faq-answer-${index}`}
+                  role="region"
                   className={`overflow-hidden transition-all duration-300 ease-in-out ${
                     isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
                   }`}

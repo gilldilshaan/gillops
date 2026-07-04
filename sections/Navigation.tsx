@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -16,6 +16,7 @@ export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -38,6 +39,19 @@ export default function Navigation() {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
+
+  const close = useCallback(() => setMobileOpen(false), []);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const firstLink = overlayRef.current?.querySelector<HTMLAnchorElement>("a");
+    firstLink?.focus();
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [mobileOpen, close]);
 
   return (
     <>
@@ -99,7 +113,11 @@ export default function Navigation() {
       </nav>
 
       <div
-        className={`fixed inset-0 z-40 bg-[#1B1918]/95 backdrop-blur-2xl md:hidden flex items-center justify-center transition-opacity duration-300 ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+        ref={overlayRef}
+        role="dialog"
+        aria-modal="true"
+        aria-hidden={!mobileOpen}
+        className={`fixed inset-0 z-40 bg-[#1B1918]/95 backdrop-blur-2xl md:hidden flex items-center justify-center transition-all duration-300 ${mobileOpen ? "opacity-100 pointer-events-auto visible" : "opacity-0 pointer-events-none invisible"}`}
       >
         <div className="flex flex-col items-center justify-center gap-8">
           {navLinks.map((item, i) => (
