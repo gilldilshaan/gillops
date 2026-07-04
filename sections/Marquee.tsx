@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const marqueeItems = [
   "AI-Powered Automation",
@@ -30,23 +30,22 @@ function MarqueeTrack() {
 }
 
 export default function Marquee() {
+  const ref = useScrollReveal<HTMLDivElement>();
+
   return (
     <section
       aria-hidden="true"
       className="border-y border-[#E2DFD9]/40 bg-[#F0EDE7] overflow-hidden py-5 relative"
     >
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="flex whitespace-nowrap"
+      <div
+        ref={ref}
+        className="reveal-fade flex whitespace-nowrap"
       >
         <div className="animate-marquee flex">
           <MarqueeTrack />
           <MarqueeTrack />
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

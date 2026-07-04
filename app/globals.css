@@ -105,6 +105,65 @@
   background: #9E9B93;
 }
 
+/* Scroll reveal animations — replaces framer-motion for scroll-triggered entries */
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes scale-in {
+  0% { opacity: 0; transform: scale(0.96); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.reveal-fade {
+  opacity: 0;
+}
+
+.reveal-fade.in-view {
+  animation: fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.reveal-fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.reveal-fade-up.in-view {
+  animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.96);
+}
+
+.reveal-scale.in-view {
+  animation: scale-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.reveal-stagger.in-view > * { animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.reveal-stagger.in-view > *:nth-child(1) { animation-delay: 0s; }
+.reveal-stagger.in-view > *:nth-child(2) { animation-delay: 0.08s; }
+.reveal-stagger.in-view > *:nth-child(3) { animation-delay: 0.16s; }
+.reveal-stagger.in-view > *:nth-child(4) { animation-delay: 0.24s; }
+.reveal-stagger.in-view > *:nth-child(5) { animation-delay: 0.32s; }
+.reveal-stagger.in-view > *:nth-child(6) { animation-delay: 0.40s; }
+.reveal-stagger.in-view > *:nth-child(7) { animation-delay: 0.48s; }
+.reveal-stagger.in-view > *:nth-child(8) { animation-delay: 0.56s; }
+.reveal-stagger.in-view > *:nth-child(9) { animation-delay: 0.64s; }
+.reveal-stagger.in-view > *:nth-child(10) { animation-delay: 0.72s; }
+
 /* Marquee */
 @keyframes marquee-scroll {
   0% { transform: translateX(0); }
@@ -117,4 +176,30 @@
 
 .animate-marquee:hover {
   animation-play-state: paused;
+}
+
+/* Nav entrance */
+@keyframes nav-slide {
+  0% { transform: translateY(-100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.animate-nav-slide {
+  animation: nav-slide 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Hero staggered entrance */
+@keyframes hero-item {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-hero-item {
+  animation: hero-item 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Floating contact entrance */
+@keyframes float-in {
+  0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }

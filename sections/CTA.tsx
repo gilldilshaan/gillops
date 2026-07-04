@@ -1,24 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 export default function CTA() {
-  const easeCurve: [number, number, number, number] = [0.16, 1, 0.3, 1];
+  const ref = useScrollReveal<HTMLDivElement>();
 
   return (
     <section className="relative bg-[#1B1918] py-28 md:py-36 px-6 overflow-hidden">
-      {/* Background glow */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div className="w-[600px] h-[600px] rounded-full bg-[#C8644E]/8 blur-[100px]" />
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, ease: easeCurve }}
-        className="relative max-w-3xl mx-auto text-center"
+      <div
+        ref={ref}
+        className="reveal-fade-up relative max-w-3xl mx-auto text-center"
       >
         <h2 className="font-heading text-3xl md:text-4xl lg:text-[3.25rem] font-bold text-white mb-6 leading-tight">
           Ready to grow your business?
@@ -43,7 +39,7 @@ export default function CTA() {
             Explore services
           </Link>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

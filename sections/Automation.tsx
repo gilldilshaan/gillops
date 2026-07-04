@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Phone, Zap, MapPin, Bot, Link2 } from "lucide-react";
 
 const automations = [
@@ -35,21 +35,18 @@ const automations = [
 ];
 
 export default function Automation() {
-  const easeCurve: [number, number, number, number] = [0.16, 1, 0.3, 1];
+  const headingRef = useScrollReveal<HTMLDivElement>();
+  const gridRef = useScrollReveal<HTMLDivElement>({ rootMargin: "0px 0px -60px 0px" });
 
   return (
     <section className="relative bg-[#1B1918] py-28 md:py-36 px-6 overflow-hidden">
-      {/* Glow accents */}
       <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[#C8644E]/6 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-[#D98B4A]/5 blur-[80px] pointer-events-none" />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: easeCurve }}
-          className="mb-20"
+        <div
+          ref={headingRef}
+          className="reveal-fade-up mb-20"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-8">
             <Zap className="w-4 h-4 text-[#C8644E]" />
@@ -59,20 +56,19 @@ export default function Automation() {
             Automation systems that work while you sleep
           </h2>
           <p className="text-lg text-[#9E9B93] max-w-2xl leading-relaxed">
-            Real AI automation tools built from scratch. These are not templates — they are production-ready systems running 24/7 for clients.
+            Real AI automation tools built from scratch. These are not templates \u2014 they are production-ready systems running 24/7 for clients.
           </p>
-        </motion.div>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {automations.map((item, index) => {
+        <div
+          ref={gridRef}
+          className="reveal-stagger grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
+          {automations.map((item) => {
             const Icon = item.icon;
             return (
-              <motion.div
+              <div
                 key={item.title}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.6, delay: index * 0.1, ease: easeCurve }}
                 className="group relative overflow-hidden rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-[#C8644E]/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_0_60px_rgba(200,100,78,0.08)]"
               >
                 <div className="p-8">
@@ -104,7 +100,7 @@ export default function Automation() {
 
                 <div className="absolute inset-0 bg-gradient-to-t from-[#C8644E]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#C8644E] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
-              </motion.div>
+              </div>
             );
           })}
         </div>

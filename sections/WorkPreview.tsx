@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { ArrowUpRight } from "lucide-react";
 
 const projects = [
@@ -35,28 +35,16 @@ const projects = [
   },
 ];
 
-const container = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.15 } },
-};
-
-const itemVariant = {
-  hidden: { opacity: 0, y: 40 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
-};
-
 export default function WorkPreview() {
-  const easeCurve: [number, number, number, number] = [0.16, 1, 0.3, 1];
+  const headingRef = useScrollReveal<HTMLDivElement>();
+  const gridRef = useScrollReveal<HTMLDivElement>({ rootMargin: "0px 0px -60px 0px" });
 
   return (
     <section className="relative bg-[#F0EDE7] py-28 md:py-36 px-6">
       <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: easeCurve }}
-          className="mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-6"
+        <div
+          ref={headingRef}
+          className="reveal-fade-up mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-6"
         >
           <div>
             <h2 className="font-heading text-3xl md:text-4xl lg:text-[3.25rem] font-bold text-[#1B1918] mb-4 leading-tight">
@@ -73,22 +61,18 @@ export default function WorkPreview() {
             View all work
             <ArrowUpRight className="w-4 h-4" />
           </Link>
-        </motion.div>
+        </div>
 
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        <div
+          ref={gridRef}
+          className="reveal-stagger grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           {projects.map((project) => (
-            <motion.a
+            <a
               key={project.title}
               href={project.href}
               target="_blank"
               rel="noopener noreferrer"
-              variants={itemVariant}
               className="group relative overflow-hidden rounded-2xl bg-white border border-[#E2DFD9]/60 
                 hover:border-[#C8644E]/15 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/[0.03] cursor-pointer block"
             >
@@ -116,11 +100,10 @@ export default function WorkPreview() {
                 </div>
               </div>
 
-              {/* Bottom hover indicator */}
               <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#C8644E] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
-            </motion.a>
+            </a>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

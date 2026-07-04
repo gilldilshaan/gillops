@@ -1,17 +1,19 @@
-import Hero from "@/sections/Hero";
-import Marquee from "@/sections/Marquee";
-import Services from "@/sections/Services";
-import Automation from "@/sections/Automation";
-import WorkPreview from "@/sections/WorkPreview";
-import Stats from "@/sections/Stats";
-import Process from "@/sections/Process";
-import Testimonials from "@/sections/Testimonials";
-import FAQ from "@/sections/FAQ";
-import CTA from "@/sections/CTA";
+import dynamic from "next/dynamic";
 import { homeMetadata } from "./metadata";
 import { Metadata } from "next";
 
 export const metadata: Metadata = homeMetadata;
+
+const Hero = dynamic(() => import("@/sections/Hero"), { ssr: false });
+const Marquee = dynamic(() => import("@/sections/Marquee"), { ssr: false });
+const Services = dynamic(() => import("@/sections/Services"), { ssr: false });
+const AutomationSection = dynamic(() => import("@/sections/Automation"), { ssr: false });
+const WorkPreview = dynamic(() => import("@/sections/WorkPreview"), { ssr: false });
+const Stats = dynamic(() => import("@/sections/Stats"), { ssr: false });
+const Process = dynamic(() => import("@/sections/Process"), { ssr: false });
+const Testimonials = dynamic(() => import("@/sections/Testimonials"), { ssr: false });
+const FAQ = dynamic(() => import("@/sections/FAQ"), { ssr: false });
+const CTA = dynamic(() => import("@/sections/CTA"), { ssr: false });
 
 export default function Home() {
   return (
@@ -19,7 +21,7 @@ export default function Home() {
       <Hero />
       <Marquee />
       <Services />
-      <Automation />
+      <AutomationSection />
       <WorkPreview />
       <Stats />
       <Process />

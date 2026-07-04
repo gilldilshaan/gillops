@@ -2,20 +2,16 @@
 
 import { useRef, useEffect } from "react";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
+
+const PARTICLE_COUNT = typeof window !== "undefined" && window.innerWidth < 768 ? 40 : 120;
+const MAX_LINE_DIST = 150;
+const MOUSE_INFLUENCE_DIST = 300;
+const FRAME_SKIP = 2;
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -27,9 +23,10 @@ export default function Hero() {
     let animationFrameId: number;
     let w = 0;
     let h = 0;
-    let mouseX = 0;
-    let mouseY = 0;
+    let mouseX = -1000;
+    let mouseY = -1000;
     let time = 0;
+    let frameCount = 0;
 
     const resize = () => {
       w = canvas.width = window.innerWidth;
@@ -42,68 +39,62 @@ export default function Hero() {
       mouseX = e.clientX;
       mouseY = e.clientY;
     };
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
 
     const particles: {
-      x: number;
-      y: number;
-      baseX: number;
-      baseY: number;
-      vx: number;
-      vy: number;
-      size: number;
-      color: string;
+      x: number; y: number; baseX: number; baseY: number;
+      vx: number; vy: number; size: number; color: string;
     }[] = [];
 
     const colors = ["#C8644E", "#E07A5F", "#D98B4A", "#F5E6C4"];
 
-    const initParticles = () => {
-      particles.length = 0;
-      const count = window.innerWidth < 768 ? 80 : 300;
-      for (let i = 0; i < count; i++) {
-        particles.push({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          baseX: Math.random() * w,
-          baseY: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
-          size: Math.random() * 4 + 2,
-          color: colors[Math.floor(Math.random() * colors.length)],
-        });
-      }
-    };
-    initParticles();
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        baseX: Math.random() * w,
+        baseY: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        size: Math.random() * 3 + 1.5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+      });
+    }
 
     const draw = () => {
+      frameCount++;
       time += 0.01;
-      
+
       ctx.fillStyle = "#0a0a0a";
       ctx.fillRect(0, 0, w, h);
 
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+      // Draw lines every N frames (expensive O(n²) operation)
+      if (frameCount % FRAME_SKIP === 0) {
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 150) {
-            const alpha = (1 - dist / 150) * 0.5;
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(200, 100, 78, ${alpha})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
+            if (dist < MAX_LINE_DIST) {
+              const alpha = (1 - dist / MAX_LINE_DIST) * 0.4;
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = `rgba(200, 100, 78, ${alpha})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
           }
         }
       }
 
-      particles.forEach((p) => {
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
         const dx = mouseX - p.x;
         const dy = mouseY - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 300) {
+        if (dist < MOUSE_INFLUENCE_DIST) {
           p.x += dx * 0.002;
           p.y += dy * 0.002;
         }
@@ -122,7 +113,7 @@ export default function Hero() {
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 5);
         gradient.addColorStop(0, p.color + "60");
         gradient.addColorStop(1, "transparent");
-        
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size * 5, 0, Math.PI * 2);
         ctx.fillStyle = gradient;
@@ -132,16 +123,28 @@ export default function Hero() {
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
         ctx.fill();
-      });
+      }
 
       animationFrameId = requestAnimationFrame(draw);
     };
 
-    draw();
+    animationFrameId = requestAnimationFrame(draw);
+
+    const handleParallax = () => {
+      if (!contentRef.current || !sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const progress = -rect.top / rect.height;
+      const clamped = Math.max(0, Math.min(1, progress));
+      contentRef.current.style.transform = `translateY(${clamped * 200}px) scale(${1 - clamped * 0.05})`;
+      contentRef.current.style.opacity = `${1 - clamped}`;
+    };
+
+    window.addEventListener("scroll", handleParallax, { passive: true });
 
     return () => {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("scroll", handleParallax);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
@@ -157,47 +160,29 @@ export default function Hero() {
         className="absolute inset-0 w-full h-full"
       />
 
-      <motion.div
-        style={{ y, opacity, scale }}
+      <div
+        ref={contentRef}
         className="relative z-10 max-w-[1000px] mx-auto px-6 text-center"
       >
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#C8644E]/20 bg-[#C8644E]/5 backdrop-blur-sm mb-10"
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#C8644E] animate-pulse" />
-          <span className="text-sm text-[#9E9B93] font-medium uppercase">AI, Automation & SEO</span>
-        </motion.div>
+        <div className="animate-hero-item opacity-0 [animation-delay:0.2s]">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#C8644E]/20 bg-[#C8644E]/5 backdrop-blur-sm mb-10">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C8644E] animate-pulse" />
+            <span className="text-sm text-[#9E9B93] font-medium uppercase">AI, Automation & SEO</span>
+          </div>
+        </div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="font-heading font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.08] tracking-tight mb-8 text-white"
-        >
+        <h1 className="animate-hero-item opacity-0 [animation-delay:0.4s] font-heading font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.08] tracking-tight mb-8 text-white">
           <span className="block">We build systems</span>
           <span className="block text-[#C8644E]">that grow your</span>
           <span className="block">business.</span>
-        </motion.h1>
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="text-lg md:text-xl text-[#9E9B93] max-w-[550px] mx-auto leading-relaxed mb-12"
-        >
+        <p className="animate-hero-item opacity-0 [animation-delay:0.6s] text-lg md:text-xl text-[#9E9B93] max-w-[550px] mx-auto leading-relaxed mb-12">
           Websites, AI automation, and SEO systems for businesses that need
           more than a static online presence.
-        </motion.p>
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
+        <div className="animate-hero-item opacity-0 [animation-delay:0.8s] flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/contact"
             className="group flex items-center gap-3 px-8 py-4 bg-[#C8644E] text-white font-medium rounded-full hover:bg-[#B5543F] transition-all duration-300 hover:shadow-[0_0_50px_rgba(200,100,78,0.25)] active:scale-[0.98]"
@@ -216,8 +201,8 @@ export default function Hero() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </section>
   );
 }

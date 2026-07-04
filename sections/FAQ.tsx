@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Plus } from "lucide-react";
 
 const faqs = [
@@ -31,10 +31,9 @@ const faqs = [
   },
 ];
 
-const easeCurve: [number, number, number, number] = [0.16, 1, 0.3, 1];
-
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const headingRef = useScrollReveal<HTMLDivElement>();
 
   const toggle = (index: number) => {
     setOpenIndex((prev) => (prev === index ? null : index));
@@ -43,17 +42,14 @@ export default function FAQ() {
   return (
     <section id="faq" className="bg-[#F9F6F1] py-28 md:py-36 px-6">
       <div className="max-w-3xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, ease: easeCurve }}
-          className="mb-16"
+        <div
+          ref={headingRef}
+          className="reveal-fade-up mb-16"
         >
           <h2 className="font-heading text-3xl md:text-4xl lg:text-[3.25rem] font-bold text-[#1B1918] mb-6 leading-tight">
             Frequently asked questions
           </h2>
-        </motion.div>
+        </div>
 
         <div className="divide-y divide-[#E2DFD9]">
           {faqs.map((faq, index) => {
@@ -75,21 +71,15 @@ export default function FAQ() {
                     <Plus size={14} className={isOpen ? "text-[#C8644E]" : "text-[#9E9B93]"} />
                   </span>
                 </button>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className="overflow-hidden"
-                    >
-                      <p className="text-sm text-[#6B6863] leading-relaxed pb-6 pr-12">
-                        {faq.a}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                  }`}
+                >
+                  <p className="text-sm text-[#6B6863] leading-relaxed pb-6 pr-12">
+                    {faq.a}
+                  </p>
+                </div>
               </div>
             );
           })}

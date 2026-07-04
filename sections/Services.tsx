@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Cpu, Globe, TrendingUp, Zap, Shield, BarChart3, Check } from "lucide-react";
 
 const services = [
@@ -26,7 +26,7 @@ const services = [
     icon: Zap,
     title: "AI Chatbots",
     description: "Custom AI chatbots trained on your business data to handle customer support, sales, and inquiries 24/7.",
-    features: ["Custom knowledge base training", "Multi-platform integration", "Natural language understanding", "Lead capture & qualification", "Analytics & conversation insights"],
+    features: ["Custom knowledge base training", "Multi-platform integration", "Natural language understanding", "Lead capture & formatting", "Analytics & conversation insights"],
   },
   {
     icon: Shield,
@@ -43,17 +43,15 @@ const services = [
 ];
 
 export default function Services() {
-  const easeCurve: [number, number, number, number] = [0.16, 1, 0.3, 1];
+  const headingRef = useScrollReveal<HTMLDivElement>();
+  const gridRef = useScrollReveal<HTMLDivElement>({ rootMargin: "0px 0px -60px 0px" });
 
   return (
     <section className="relative bg-[#F9F6F1] py-28 md:py-36 px-6">
       <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: easeCurve }}
-          className="mb-20"
+        <div
+          ref={headingRef}
+          className="reveal-fade-up mb-20"
         >
           <h2 className="font-heading text-3xl md:text-4xl lg:text-[3.25rem] font-bold text-[#1B1918] mb-7 leading-tight">
             What we do
@@ -62,18 +60,17 @@ export default function Services() {
             Everything you need to automate, optimise, and grow your business.
             Each service is designed to work together as a complete growth engine.
           </p>
-        </motion.div>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div
+          ref={gridRef}
+          className="reveal-stagger grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
           {services.map((service, index) => {
             const Icon = service.icon;
             return (
-              <motion.div
+              <div
                 key={service.title}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.6, delay: index * 0.08, ease: easeCurve }}
                 className="group relative overflow-hidden rounded-2xl bg-white border border-[#E2DFD9]/60 
                   hover:border-[#C8644E]/15 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/[0.03]"
               >
@@ -103,7 +100,7 @@ export default function Services() {
                     ))}
                   </ul>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>

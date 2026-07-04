@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Inter, Syne } from "next/font/google";
 import "./globals.css";
-import Navigation from "@/sections/Navigation";
+import dynamic from "next/dynamic";
 import Footer from "@/sections/Footer";
-import FloatingContact from "@/components/FloatingContact";
-import SmoothScrollProvider from "@/components/SmoothScroll";
 import { homeMetadata } from "./metadata";
+
+const Navigation = dynamic(() => import("@/sections/Navigation"), { ssr: false });
+const FloatingContact = dynamic(() => import("@/components/FloatingContact"), { ssr: false });
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,12 +31,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${syne.variable} font-sans antialiased`}>
-        <SmoothScrollProvider>
-          <Navigation />
-          <main>{children}</main>
-          <Footer />
-          <FloatingContact />
-        </SmoothScrollProvider>
+        <Navigation />
+        <main>{children}</main>
+        <Footer />
+        <FloatingContact />
       </body>
     </html>
   );
