@@ -1,0 +1,11 @@
+Site: https://gillops.dpdns.org
+Purpose: AI automation agency
+Services:
+- AI receptionists for dentists, law firms, salons, and local businesses
+- Website development for healthcare, legal, real estate, and beauty industries
+- Lead automation systems that qualify and follow up with prospects 24/7
+- SEO systems for local business ranking
+- AI chatbots trained on business data
+- CRM integration and automation
+- Google Maps lead scraping and outreach
+- LinkedIn automation for B2B lead generation

@@ -8,6 +8,10 @@ import Process from "@/sections/Process";
 import Testimonials from "@/sections/Testimonials";
 import FAQ from "@/sections/FAQ";
 import CTA from "@/sections/CTA";
+import { homeMetadata } from "./metadata";
+import { Metadata } from "next";
+
+export const metadata: Metadata = homeMetadata;
 
 export default function Home() {
   return (

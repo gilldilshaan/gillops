@@ -5,6 +5,7 @@ import Navigation from "@/sections/Navigation";
 import Footer from "@/sections/Footer";
 import FloatingContact from "@/components/FloatingContact";
 import SmoothScrollProvider from "@/components/SmoothScroll";
+import { homeMetadata } from "./metadata";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,45 +20,7 @@ const syne = Syne({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://gillops.vercel.app"),
-  title: "GILLOPS — Websites, AI Automation & SEO for Growing Businesses",
-  description:
-    "AI automation agency for small businesses. GILLOPS designs and builds websites, AI automation, and SEO systems that drive real growth.",
-  keywords: [
-    "AI automation agency",
-    "web development",
-    "SEO services",
-    "business automation",
-    "website design",
-    "AI chatbot",
-    "LinkedIn automation",
-    "Google Maps scraper",
-  ],
-  openGraph: {
-    title: "GILLOPS — Websites, AI Automation & SEO for Growing Businesses",
-    description:
-      "AI automation agency for small businesses. GILLOPS designs and builds websites, AI automation, and SEO systems that drive real growth.",
-    url: "https://gillops.vercel.app",
-    siteName: "GILLOPS",
-    type: "website",
-    images: [
-      {
-        url: "https://gillops.vercel.app/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "GILLOPS — Websites, AI Automation & SEO for Growing Businesses",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "GILLOPS — Websites, AI Automation & SEO for Growing Businesses",
-    description:
-      "AI automation agency for small businesses. GILLOPS designs and builds websites, AI automation, and SEO systems that drive real growth.",
-    images: ["https://gillops.vercel.app/og-image.jpg"],
-  },
-};
+export const metadata: Metadata = homeMetadata;
 
 export default function RootLayout({
   children,
