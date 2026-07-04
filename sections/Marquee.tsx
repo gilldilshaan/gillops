@@ -19,7 +19,7 @@ function MarqueeTrack() {
       {marqueeItems.map((item, i) => (
         <span
           key={i}
-          className="inline-flex items-center gap-5 px-6 shrink-0 text-sm font-medium tracking-wide text-[#9E9B93]"
+          className="inline-flex items-center gap-5 px-6 shrink-0 text-sm font-medium tracking-wide text-[#7A7770]"
         >
           {item}
           <span className="w-1.5 h-1.5 rounded-full bg-[#C8644E] shrink-0" />

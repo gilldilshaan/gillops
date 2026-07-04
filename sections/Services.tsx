@@ -79,7 +79,7 @@ export default function Services() {
                     <div className="w-12 h-12 rounded-xl bg-[#C8644E]/8 flex items-center justify-center">
                       <Icon className="w-6 h-6 text-[#C8644E]" />
                     </div>
-                    <span className="text-sm text-[#9E9B93] font-mono tabular-nums">
+                    <span className="text-sm text-[#7A7770] font-mono tabular-nums">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                   </div>

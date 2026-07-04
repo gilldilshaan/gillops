@@ -78,10 +78,10 @@ export default function WorkPreview() {
             >
               <div className="p-8">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs text-[#9E9B93] font-mono uppercase tracking-wider">
+                  <span className="text-xs text-[#7A7770] font-mono uppercase tracking-wider">
                     {project.category}
                   </span>
-                  <ArrowUpRight className="w-5 h-5 text-[#9E9B93] group-hover:text-[#C8644E] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
+                  <ArrowUpRight className="w-5 h-5 text-[#7A7770] group-hover:text-[#C8644E] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
                 </div>
 
                 <h3 className="font-heading text-xl font-bold text-[#1B1918] mb-3 group-hover:text-[#C8644E] transition-colors duration-300">

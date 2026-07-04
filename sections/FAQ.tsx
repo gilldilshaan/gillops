@@ -31,6 +31,19 @@ const faqs = [
   },
 ];
 
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: f.a,
+    },
+  })),
+};
+
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const headingRef = useScrollReveal<HTMLDivElement>();
@@ -41,6 +54,10 @@ export default function FAQ() {
 
   return (
     <section id="faq" className="bg-[#F9F6F1] py-28 md:py-36 px-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <div className="max-w-3xl mx-auto">
         <div
           ref={headingRef}
@@ -68,7 +85,7 @@ export default function FAQ() {
                       isOpen ? "bg-[#C8644E]/10 border-[#C8644E]/30 rotate-45" : "bg-white"
                     }`}
                   >
-                    <Plus size={14} className={isOpen ? "text-[#C8644E]" : "text-[#9E9B93]"} />
+                    <Plus size={14} className={isOpen ? "text-[#C8644E]" : "text-[#7A7770]"} />
                   </span>
                 </button>
                 <div
@@ -76,7 +93,7 @@ export default function FAQ() {
                     isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
                   }`}
                 >
-                  <p className="text-sm text-[#6B6863] leading-relaxed pb-6 pr-12">
+                  <p className="text-sm text-[#4A453F] leading-relaxed pb-6 pr-12">
                     {faq.a}
                   </p>
                 </div>

@@ -63,7 +63,7 @@ export default function Process() {
                 <div className="w-16 h-16 rounded-full bg-[#C8644E]/8 flex items-center justify-center mx-auto mb-6 border border-[#C8644E]/15 group-hover:bg-[#C8644E]/12 transition-colors duration-300">
                   <Icon className="w-7 h-7 text-[#C8644E]" />
                 </div>
-                <span className="text-sm text-[#9E9B93] font-mono font-medium mb-2 block">
+                <span className="text-sm text-[#7A7770] font-mono font-medium mb-2 block">
                   Step {step.number}
                 </span>
                 <h3 className="font-heading text-xl font-bold text-[#1B1918] mb-3">
