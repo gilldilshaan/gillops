@@ -130,26 +130,26 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Calendly embed suggestion */}
-            <div className="rounded-2xl border-2 border-dashed border-[#C8644E]/30 bg-[#C8644E]/5 p-8 text-center space-y-4">
-              <p className="text-sm font-medium text-[#4A453F] uppercase tracking-wider">
-                Calendly Embed
-              </p>
-              <p className="text-[#1B1918] text-lg font-semibold">
-                Prefer to schedule directly?
-              </p>
-              <p className="text-[#4A453F] text-sm">
-                Replace this section with your Calendly inline embed.
-              </p>
-              {/*
-                <iframe
-                  src="https://calendly.com/gill0px/new-meeting"
-                  width="100%"
-                  height="600"
-                  frameBorder="0"
-                  title="Calendly Scheduling"
-                />
-              */}
+            {/* Calendly embed */}
+            <div className="rounded-2xl bg-white border border-[#E2DFD9]/60 overflow-hidden min-h-[600px]">
+              <div className="p-6 pb-0 text-center">
+                <p className="text-[#1B1918] text-lg font-semibold mb-1">
+                  Prefer to schedule directly?
+                </p>
+                <p className="text-[#4A453F] text-sm mb-4">
+                  Pick a time that works for you.
+                </p>
+              </div>
+              <iframe
+                src="https://calendly.com/gill0px/new-meeting"
+                width="100%"
+                height="550"
+                frameBorder="0"
+                title="Schedule a meeting with GillOps"
+                loading="lazy"
+                className="w-full"
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-popups-to-escape-sandbox"
+              />
             </div>
           </section>
 
